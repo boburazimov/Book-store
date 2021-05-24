@@ -5,17 +5,19 @@ import {connect} from "react-redux";
 import {withBookstoreService} from "../hoc";
 import {booksLoaded} from "../../actions";
 import compose from "../../utils";
+import Spinner from "../spinner";
 
-const BookList = ({books, booksLoaded, bookstoreService}) => {
+const BookList = ({books, loading, booksLoaded, bookstoreService}) => {
 
     useEffect(() => {
-        // 1. receive data
-        const data = bookstoreService.getBooks();
+        console.log('USE-EFFECT');
+        bookstoreService.getBooks()
+            .then(data => booksLoaded(data));
+    }, [books, booksLoaded, bookstoreService]);
 
-        // 2. dispatch action to store
-        booksLoaded(data);
-    },[]);
-
+    if (loading) {
+        return <Spinner/>
+    }
     return (
         <ul className="book-list">
             {books.map((book) => {
@@ -29,8 +31,8 @@ const BookList = ({books, booksLoaded, bookstoreService}) => {
     )
 };
 
-const mapStateToProps = ({books}) => {
-    return {books};
+const mapStateToProps = ({books, loading}) => {
+    return {books, loading};
 };
 
 const mapDispatchToProps = {booksLoaded};

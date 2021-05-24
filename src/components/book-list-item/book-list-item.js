@@ -1,5 +1,6 @@
 import React from "react";
 import "./book-list-item.css";
+import {Link} from "react-router-dom";
 
 const BookListItem = ({book}) => {
 
@@ -11,7 +12,9 @@ const BookListItem = ({book}) => {
                 <img src={coverImage} alt="cover"/>
             </div>
             <div className="book-details">
-                <a href="#" className="book-title">{title}</a>
+                <Link to="/book">
+                    <div className="book-title">{title}</div>
+                </Link>
                 <div className="book-author">{author}</div>
                 <div className="book-price">${price}</div>
                 <button className="btn btn-info add-to-cart">Add to cart</button>
