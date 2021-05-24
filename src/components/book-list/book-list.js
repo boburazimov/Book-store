@@ -1,9 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./book-list.css";
 import BookListItem from "../book-list-item";
 import {connect} from "react-redux";
+import {withBookstoreService} from "../hoc";
+import {booksLoaded} from "../../actions";
+import compose from "../../utils";
 
-const BookList = ({books}) => {
+const BookList = ({books, booksLoaded, bookstoreService}) => {
+
+    useEffect(() => {
+        const data = bookstoreService.getBooks();
+        console.log(data);
+        booksLoaded(data);
+    },[]);
+
     return (
         <ul>
             {books.map((book) => {
@@ -21,4 +31,9 @@ const mapStateToProps = ({books}) => {
     return {books};
 };
 
-export default connect(mapStateToProps)(BookList);
+const mapDispatchToProps = {booksLoaded};
+
+export default compose(
+    withBookstoreService(),
+    connect(mapStateToProps, mapDispatchToProps)
+)(BookList);
