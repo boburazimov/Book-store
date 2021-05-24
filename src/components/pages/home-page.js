@@ -1,8 +1,22 @@
 import React from "react";
+import BookList from "../book-list";
 
 const HomePage = () => {
+
+    const books = [
+        {
+            id: 1,
+            title: 'Production-Ready Microservices',
+            author: 'Susan J. Fowler'
+        },
+        {
+            id: 2,
+            title: 'Realise It!',
+            author: 'Michael T. Nygard'
+        }
+    ]
     return (
-        <div>Home Page</div>
+        <BookList books={books}/>
     )
 };
 
