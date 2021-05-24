@@ -9,13 +9,15 @@ import compose from "../../utils";
 const BookList = ({books, booksLoaded, bookstoreService}) => {
 
     useEffect(() => {
+        // 1. receive data
         const data = bookstoreService.getBooks();
-        console.log(data);
+
+        // 2. dispatch action to store
         booksLoaded(data);
     },[]);
 
     return (
-        <ul>
+        <ul className="book-list">
             {books.map((book) => {
                 return (
                     <li key={book.id}>
