@@ -6,9 +6,13 @@ const initialState = {
 const Reducers = (state = initialState, actions) => {
 
     switch (actions.type) {
+        case 'BOOKS_REQUESTED':
+            return {
+                books: [],
+                loading: true
+            }
         case 'BOOKS_LOADED':
             return {
-                ...state,
                 books: actions.payload,
                 loading: false
             };
