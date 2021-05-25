@@ -7,19 +7,19 @@ const initialState = {
 const Reducers = (state = initialState, actions) => {
 
     switch (actions.type) {
-        case 'BOOKS_REQUESTED':
+        case 'FETCH_BOOKS_REQUEST':
             return {
                 books: [],
                 loading: true,
                 error: null
             }
-        case 'BOOKS_LOADED':
+        case 'FETCH_BOOKS_SUCCESS':
             return {
                 books: actions.payload,
                 loading: false,
                 error: null
             };
-        case 'BOOKS_ERROR':
+        case 'FETCH_BOOKS_FAILURE':
             return {
                 books: [],
                 loading: false,
