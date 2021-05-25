@@ -8,15 +8,12 @@ import compose from "../../utils";
 import Spinner from "../spinner";
 import ErrorIndicator from "../error-indicator";
 
-const BookList = ({books, loading, error, booksLoaded, bookstoreService, booksRequested, booksError}) => {
+const BookList = ({books, loading, error, fetchBooks}) => {
 
     useEffect(() => {
         console.log('USE-EFFECT');
-        booksRequested();
-        bookstoreService.getBooks()
-            .then(data => booksLoaded(data))
-            .catch(error => booksError(error));
-    }, [booksLoaded, bookstoreService, booksRequested, booksError]);
+        fetchBooks();
+    }, [fetchBooks]);
 
     if (loading) {
         return <Spinner/>
@@ -43,7 +40,17 @@ const mapStateToProps = ({books, loading, error}) => {
     return {books, loading, error};
 };
 
-const mapDispatchToProps = {booksLoaded, booksRequested, booksError};
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const {bookstoreService} = ownProps;
+    return {
+        fetchBooks: () => {
+            dispatch(booksRequested());
+            bookstoreService.getBooks()
+                .then(data => dispatch(booksLoaded(data)))
+                .catch(error => dispatch(booksError(error)));
+        }
+    }
+};
 
 export default compose(
     withBookstoreService(),
