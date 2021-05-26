@@ -1,15 +1,3 @@
-const initialState = {
-    bookList: {
-        books: [],
-        loading: true,
-        error: null
-    },
-    shoppingCard: {
-        cardItems: [],
-        orderTotal: 0
-    }
-}
-
 const updateCardItems = (cardItems, item, itemIndex) => {
 
     if (item.count === 0) {
@@ -60,6 +48,15 @@ const updateOrder = (state, bookId, quantity) => {
 };
 
 const updateBookList = (state, actions) => {
+
+    if (state === undefined) {
+        return {
+            books: [],
+            loading: true,
+            error: null
+        }
+    }
+
     switch (actions.type) {
         case 'FETCH_BOOKS_REQUEST':
             return {
@@ -85,6 +82,14 @@ const updateBookList = (state, actions) => {
 };
 
 const updateShoppingCard = (state, actions) => {
+
+    if (state === undefined) {
+        return {
+            cardItems: [],
+            orderTotal: 0
+        }
+    }
+
     switch (actions.type) {
         case 'BOOK_ADDED_TO_CARD':
             return updateOrder(state, actions.payload, 1);
@@ -98,8 +103,7 @@ const updateShoppingCard = (state, actions) => {
     }
 };
 
-const Reducers = (state = initialState, actions) => {
-
+const Reducers = (state, actions) => {
     return {
         bookList: updateBookList(state, actions),
         shoppingCard: updateShoppingCard(state, actions),
