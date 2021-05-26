@@ -15,13 +15,23 @@ const fetchBooks = (dispatch, bookstoreService) => () => {
     bookstoreService.getBooks()
         .then(data => dispatch(booksLoaded(data)))
         .catch(error => dispatch(booksError(error)));
-}
+};
 
 const bookAddedToCard = (id) => {
     return {type: 'BOOK_ADDED_TO_CARD', payload: id}
-}
+};
+
+const bookRemovedFromCard = (id) => {
+    return {type: 'BOOK_REMOVED_FROM_CARD', payload: id}
+};
+
+const allBooksRemovedFromCard = (id) => {
+    return {type: 'ALL_BOOKS_REMOVED_FROM_CARD', payload: id}
+};
 
 export {
     fetchBooks,
-    bookAddedToCard
+    bookAddedToCard,
+    bookRemovedFromCard,
+    allBooksRemovedFromCard
 };

@@ -3,10 +3,18 @@ const initialState = {
     loading: true,
     error: null,
     cardItems: [],
-    orderTotal: null
+    orderTotal: 0
 }
 
 const updateCardItems = (cardItems, item, itemIndex) => {
+
+    if (item.count === 0){
+        return [
+            ...cardItems.slice(0, itemIndex),
+            ...cardItems.slice(itemIndex + 1)
+        ]
+    }
+
     if (itemIndex === -1) {
         return [
             ...cardItems,
@@ -20,7 +28,7 @@ const updateCardItems = (cardItems, item, itemIndex) => {
     ]
 }
 
-const updateCardItem = (book, item = {}) => {
+const updateCardItem = (book, item = {}, quantity) => {
 
     const {
         id = book.id,
@@ -30,7 +38,21 @@ const updateCardItem = (book, item = {}) => {
     } = item;
 
     return {
-        id, title, count: count + 1, total: total + book.price
+        id, title, count: count + quantity, total: total + quantity*book.price
+    };
+};
+
+const updateOrder = (state, bookId, quantity) => {
+    const {books, cardItems, orderTotal} = state;
+    const book = books.find(({id}) => id === bookId);
+    const itemIndex = cardItems.findIndex(({id}) => id === bookId);
+    const item = cardItems[itemIndex];
+
+    const newItem = updateCardItem(book, item, quantity);
+    return {
+        ...state,
+        cardItems: updateCardItems(cardItems, newItem, itemIndex),
+        orderTotal: orderTotal + quantity*book.price
     };
 };
 
@@ -57,19 +79,14 @@ const Reducers = (state = initialState, actions) => {
                 books: [],
                 loading: false,
                 error: actions.payload
-            }
+            };
         case 'BOOK_ADDED_TO_CARD':
-            const bookId = actions.payload;
-            const book = state.books.find(book => book.id === bookId);
-            const itemIndex = state.cardItems.findIndex(({id}) => id === bookId);
-            const item = state.cardItems[itemIndex];
-
-            const newItem = updateCardItem(book, item);
-            return {
-                ...state,
-                cardItems: updateCardItems(state.cardItems, newItem, itemIndex),
-                orderTotal: state.orderTotal + book.price
-            }
+            return updateOrder(state, actions.payload, 1);
+        case 'BOOK_REMOVED_FROM_CARD':
+            return updateOrder(state, actions.payload, -1);
+        case 'ALL_BOOKS_REMOVED_FROM_CARD':
+            const item = state.cardItems.find(({id}) => id === actions.payload);
+            return updateOrder(state, actions.payload, -item.count);
 
         default:
             return state;
