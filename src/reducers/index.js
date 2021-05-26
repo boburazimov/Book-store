@@ -2,22 +2,37 @@ const initialState = {
     books: [],
     loading: true,
     error: null,
-    cardItems: [
-        {
-            id: 1,
-            name: 'Book 1',
-            count: 2,
-            total: 150
-        },
-        {
-            id: 2,
-            name: 'Book 22',
-            count: 3,
-            total: 1400
-        }
-    ],
-    orderTotal: 1520
+    cardItems: [],
+    orderTotal: null
 }
+
+const updateCardItems = (cardItems, item, itemIndex) => {
+    if (itemIndex === -1) {
+        return [
+            ...cardItems,
+            item
+        ]
+    }
+    return [
+        ...cardItems.slice(0, itemIndex),
+        item,
+        ...cardItems.slice(itemIndex + 1)
+    ]
+}
+
+const updateCardItem = (book, item = {}) => {
+
+    const {
+        id = book.id,
+        title = book.title,
+        count = 0,
+        total = 0
+    } = item;
+
+    return {
+        id, title, count: count + 1, total: total + book.price
+    };
+};
 
 const Reducers = (state = initialState, actions) => {
 
@@ -43,6 +58,19 @@ const Reducers = (state = initialState, actions) => {
                 loading: false,
                 error: actions.payload
             }
+        case 'BOOK_ADDED_TO_CARD':
+            const bookId = actions.payload;
+            const book = state.books.find(book => book.id === bookId);
+            const itemIndex = state.cardItems.findIndex(({id}) => id === bookId);
+            const item = state.cardItems[itemIndex];
+
+            const newItem = updateCardItem(book, item);
+            return {
+                ...state,
+                cardItems: updateCardItems(state.cardItems, newItem, itemIndex),
+                orderTotal: state.orderTotal + book.price
+            }
+
         default:
             return state;
     }
