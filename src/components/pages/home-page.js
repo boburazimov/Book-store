@@ -1,13 +1,13 @@
 import React from "react";
-import ShoppingCartTable from '../shopping-cart-table/shopping-cart-table';
 import BookListContainer from "../../containers/book-list-container/book-list-container";
+import ShoppingCartTableContainer from "../../containers/shopping-card-table-container/shopping-card-table-container";
 
 const HomePage = () => {
 
     return (
         <div>
             <BookListContainer/>
-            <ShoppingCartTable/>
+            <ShoppingCartTableContainer/>
         </div>
     )
 };

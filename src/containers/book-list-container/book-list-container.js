@@ -11,7 +11,6 @@ import BookList from "../../components/book-list";
 const BookListContainer = ({books, loading, error, fetchBooks, onAddedToCard}) => {
 
     useEffect(() => {
-        console.log('USE-EFFECT');
         fetchBooks();
     }, [fetchBooks]);
 
