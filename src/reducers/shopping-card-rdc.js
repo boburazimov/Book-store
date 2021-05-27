@@ -47,7 +47,7 @@ const updateOrder = (state, bookId, quantity) => {
     };
 };
 
-const updateShoppingCard = (state, actions) => {
+const updateShoppingCard = (state, action) => {
 
     if (state === undefined) {
         return {
@@ -56,14 +56,14 @@ const updateShoppingCard = (state, actions) => {
         }
     }
 
-    switch (actions.type) {
+    switch (action.type) {
         case 'BOOK_ADDED_TO_CARD':
-            return updateOrder(state, actions.payload, 1);
+            return updateOrder(state, action.payload, 1);
         case 'BOOK_REMOVED_FROM_CARD':
-            return updateOrder(state, actions.payload, -1);
+            return updateOrder(state, action.payload, -1);
         case 'ALL_BOOKS_REMOVED_FROM_CARD':
-            const item = state.shoppingCard.cardItems.find(({id}) => id === actions.payload);
-            return updateOrder(state, actions.payload, -item.count);
+            const item = state.shoppingCard.cardItems.find(({id}) => id === action.payload);
+            return updateOrder(state, action.payload, -item.count);
         default:
             return state.shoppingCard;
     }
